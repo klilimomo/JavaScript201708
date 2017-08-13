@@ -12,13 +12,24 @@
         initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0：初始、最大、最小的缩放比例都是1:1，页面既不会放大也不会缩小
     -->
     <title>珠峰培训</title>
+
+    <!--import css-->
+    <link rel="stylesheet" href="css/reset.min.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 <ul class="newsItem" id="newsItem">
+    <!--
+    延迟加载
+        DIV的背景图是默认的占位图
+        IMG开始不显示,只有加载成功才显示
+        IMG的SRC开始是空,DATA-SRC存储真实图片的地址
+        JS中完成懒加载的处理
+    -->
     <li>
-        <img src="" alt="">
-        <h3></h3>
-        <p></p>
+        <div><img src="" data-src="" alt=""></div>
+        <h3>网络强国战略习近平与“十三五”十四大战略</h3>
+        <p>互联网是二十世纪人类最大的发明互联网是二十世纪.</p>
     </li>
 </ul>
 
