@@ -31,6 +31,9 @@ html, body {
     display: none;
     width: 100%;
     height: 100%;
+    /*开始让图片透明度为零,当加载出来后实现一个渐显效果*/
+    opacity: 0;
+    filter: alpha(opacity=0);
 }
 
 .newsItem li h3 {
