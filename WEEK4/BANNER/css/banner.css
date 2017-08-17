@@ -10,7 +10,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 4000px; /*需要计算:图片的数量 * BANNER的宽度*/
+    width: 100%; /*需要计算:图片的数量 * BANNER的宽度*/
     height: 100%;
 }
 
