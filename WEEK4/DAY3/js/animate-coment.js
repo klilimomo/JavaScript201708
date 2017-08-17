@@ -177,116 +177,78 @@ var animationEffect = {
     }
 };
 
-~function () {
-    //=>准备我们需要的工具包
-    var utils = (function () {
-        var isHighVersion = 'getComputedStyle' in window;
 
-        function getCss(curEle, attr) {
-            var val = null;
-            if (isHighVersion) {
-                val = window.getComputedStyle(curEle, null)[attr];
-            } else {
-                if (attr.toLowerCase() === 'opacity') {
-                    val = curEle.currentStyle['filter'];
-                    reg = /^alpha\(opacity=(.+)\)$/i;
-                    val = reg.test(val) ? reg.exec(val)[1] / 100 : 1;
-                } else {
-                    val = curEle.currentStyle[attr];
-                }
-            }
-            var temp = parseFloat(val);
-            val = isNaN(temp) ? val : temp;
-            return val;
+//=>随着我们的动画库需要传递的实参越来越多的时候,我们发现定义形参变量接收传递内容的方式已经不好去操控了
+//1、传递的时候需要按照顺序依次传递,如果顺序混乱,接收的值也乱了
+//2、轻易不能出现不传参给默认的情况,因为其中一个不传,拿后面传递的值会整体都向前靠一位
+//...
+
+//=>真正项目中如果一个方法需要传递的实参很多的话,我们都会告别形参的时代,开启对象统一处理参数的时代
+//options：对象,对象中存储了我们需要传递给函数的内容
+// {
+//     curEle:你传递的需要操作的元素,
+//     target:目标位置的样式值,
+//     duration:总运动时间,
+//     effect:运动的动画效果,
+//     callBack:动画完成后执行的回调函数
+// }
+//->这五个属性我们先给它一些默认值,传递的时候有些属性值可以不传递,我们把传递进来的属性值替换默认的值
+//1、我们在传递的时候不一定要按照顺序了,只要指定好对应的属性名即可
+//2、不想传递的也可以不传递了,不传递的走默认值即可
+function animate(options) {
+    //->参数初始化
+    var _default = {
+        curEle: null,
+        target: null,
+        duration: 1000,
+        effect: animationEffect.Linear,
+        callBack: null
+    };
+    //->循环传递的options,让传递的值覆盖默认值
+    for (var attr in options) {
+        if (options.hasOwnProperty(attr)) {
+            _default[attr] = options[attr];
         }
+    }
+    //->以后操作都使用_default.xxx(麻烦),我们最好在把其每一项都设置为私有的变量
+    var curEle = _default.curEle,
+        target = _default.target,
+        duration = _default.duration,
+        effect = _default.effect,
+        callBack = _default.callBack;
+    // for (attr in _default) {
+    //     if (_default.hasOwnProperty(attr)) {
+    //         eval('var ' + attr + '=_default["' + attr + '"]');
+    //     }
+    // }
 
-        function setCss(curEle, attr, value) {
-            if (attr.toLowerCase() === 'opacity') {
-                curEle.style.opacity = value;
-                curEle.style.filter = 'alpha(opacity=' + (value * 100) + ')';
-                return;
-            }
 
-            var unitReg = /^(zIndex|fontWeight)$/i;
-            if (!isNaN(value) && !unitReg.test(attr)) {
-                value += 'px';
-            }
-            curEle['style'][attr] = value;
+    var time = 0,
+        begin = {},
+        change = {};
+    for (var key in target) {
+        if (target.hasOwnProperty(key)) {
+            begin[key] = utils.css(curEle, key);
+            change[key] = target[key] - begin[key];
         }
-
-        function setGroupCss(curEle, options) {
-            if (Object.prototype.toString.call(options) !== '[object Object]') return;
-            for (var attr in options) {
-                if (options.hasOwnProperty(attr)) {
-                    setCss(curEle, attr, options[attr]);
-                }
-            }
-        }
-
-        function css() {
-            var arg = arguments,
-                len = arg.length,
-                fn = getCss;
-            if (len >= 3) fn = setCss;
-            if (len === 2 && typeof arg[1] === 'object') fn = setGroupCss;
-            return fn.apply(null, arg);
-        }
-
-        return {css: css}
-    })();
-
-    //=>实现动画
-    function animate(options) {
-        //->init parameters
-        var _default = {
-            curEle: null,
-            target: null,
-            duration: 1000,
-            effect: animationEffect.Linear,
-            callBack: null
-        };
-        for (var attr in options) {
-            if (options.hasOwnProperty(attr)) {
-                _default[attr] = options[attr];
-            }
-        }
-        var curEle = _default.curEle,
-            target = _default.target,
-            duration = _default.duration,
-            effect = _default.effect,
-            callBack = _default.callBack;
-
-        //->prepare time/begin/change/duration
-        var time = 0,
-            begin = {},
-            change = {};
-        for (var key in target) {
-            if (target.hasOwnProperty(key)) {
-                begin[key] = utils.css(curEle, key);
-                change[key] = target[key] - begin[key];
-            }
-        }
-
-        //->running
-        window.clearInterval(curEle.animateTimer);
-        curEle.animateTimer = window.setInterval(function () {
-            time += 17;
-            if (time >= duration) {
-                window.clearInterval(curEle.animateTimer);
-                utils.css(curEle, target);
-                callBack && callBack.call(curEle);
-                return;
-            }
-            var current = {};
-            for (var key in target) {
-                if (target.hasOwnProperty(key)) {
-                    current[key] = effect(time, begin[key], change[key], duration);
-                }
-            }
-            utils.css(curEle, current);
-        }, 17);
     }
 
-    //=>把动画库暴露在全局下
-    window.zhufengAnimate = animate;
-}();
+    window.clearInterval(curEle.animateTimer);
+    curEle.animateTimer = window.setInterval(function () {
+        time += 17;
+        if (time >= duration) {
+            utils.css(curEle, target);
+            window.clearInterval(curEle.animateTimer);
+
+            //->动画完成后执行回调函数:让回调函数中的THIS是当前需要操作的元素
+            callBack && callBack.call(curEle);
+            return;
+        }
+        var current = {};
+        for (var key in target) {
+            if (!target.hasOwnProperty(key)) continue;
+            current[key] = effect(time, begin[key], change[key], duration);
+        }
+        utils.css(curEle, current);
+    }, 17);
+}
