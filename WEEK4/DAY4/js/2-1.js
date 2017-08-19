@@ -7,7 +7,9 @@ var minL = 0,
 //->假设我们设定步长为10PX,接下来我们让当前元素在现有的LEFT基础上累加步长,就可以实现向右运动的动画了
 var timer = window.setInterval(function () {
     var curL = utils.css(box, 'left');
-    if (curL >= maxL) {
+    //->为了防止多走一步会超过边界,少走一步到不了边界,我们JS实现动画的时候,边界判断都是加上步长来处理的(相当于模拟走一步看情况,如果模拟这一步超过了边界,我们直接让其运动到边界即可)
+    if (curL + 10 >= maxL) {
+        utils.css(box, 'left', maxL);
         window.clearInterval(timer);
         return;
     }
