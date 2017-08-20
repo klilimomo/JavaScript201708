@@ -175,8 +175,7 @@
             curEle: null,
             target: null,
             duration: 1000,
-            effect: animationEffect.Linear,
-            callBack: null
+            effect: animationEffect.Linear
         };
         for (var attr in options) {
             if (options.hasOwnProperty(attr)) {
@@ -186,8 +185,7 @@
         var curEle = _default.curEle,
             target = _default.target,
             duration = _default.duration,
-            effect = _default.effect,
-            callBack = _default.callBack;
+            effect = _default.effect;
 
         //->prepare T/B/C/D
         var time = 0,
@@ -207,9 +205,6 @@
             if (time >= duration) {
                 utils.css(curEle, target);
                 clearInterval(curEle.animateTimer);
-
-                //->run end：perform callback functions
-                callBack && callBack.call(curEle);
                 return;
             }
             var current = {};

@@ -168,26 +168,37 @@
         }
     };
 
+
     //=>realization animate (depend on utils)
-    function animate(options) {
-        //->initialize(init) parameters
+    //=>当一个函数需要传递很多实参的时候，并且有些实参可以不传递，如果我们还是定义成一个个形参的方式，处理起来非常的麻烦，受到传递顺序的限制了
+    //=>我们定义一个实参OPTIONS:{xxx:xxx,xxx:xxx...}把我们需要传递的实参当做一个对象的属性名和属性值传递进来，这样不会受到顺序的限制
+    // zhufengAnimate({
+    //     target: {
+    //         left: 600
+    //     },
+    //     effect: animationEffect.Back.easeOut,
+    //     duration: 1000,
+    //     curEle: box
+    // });
+
+    window.zhufengAnimate = function (options) {
+        //->initialize(init) parameters 初始化参数配置
         var _default = {
             curEle: null,
             target: null,
             duration: 1000,
-            effect: animationEffect.Linear,
-            callBack: null
+            effect: animationEffect.Linear
         };
         for (var attr in options) {
             if (options.hasOwnProperty(attr)) {
                 _default[attr] = options[attr];
             }
         }
+        //->_default.curEle / _default.duration  这样使用太长了,写起来麻烦,我们把需要使用的属性值用一些简单的变量存储起来
         var curEle = _default.curEle,
             target = _default.target,
             duration = _default.duration,
-            effect = _default.effect,
-            callBack = _default.callBack;
+            effect = _default.effect;
 
         //->prepare T/B/C/D
         var time = 0,
@@ -200,16 +211,12 @@
             }
         }
 
-        //->running (clear other animate before running)
-        clearInterval(curEle.animateTimer);
+        clearInterval(curEle.animateTimer);//->clear other animate
         curEle.animateTimer = setInterval(function () {
             time += 17;
             if (time >= duration) {
                 utils.css(curEle, target);
                 clearInterval(curEle.animateTimer);
-
-                //->run end：perform callback functions
-                callBack && callBack.call(curEle);
                 return;
             }
             var current = {};
@@ -220,9 +227,5 @@
             }
             utils.css(curEle, current);
         }, 17);
-    }
-
-    //=>setting window property
-    window.zhufengEffect = animationEffect;
-    window.zhufengAnimate = animate;
+    };
 }();

@@ -1,7 +1,3 @@
-img[src=''] {
-    display: none;
-}
-
 .banner {
     position: relative;
     margin: 0 auto;
@@ -30,7 +26,13 @@ img[src=''] {
     filter: alpha(opacity=0);
 }
 
-.banner .imgBox li img {
+.banner .imgBox li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.banner .imgBox li a img {
     width: 100%;
     height: 100%;
 }
