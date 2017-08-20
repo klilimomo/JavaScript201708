@@ -9,7 +9,6 @@ var bannerRender = (function () {
         itemList = null,
         focusList = null;
 
-    //->获取数据
     function queryData() {
         var xhr = new XMLHttpRequest;
         xhr.open('GET', 'json/banner.json', false);
@@ -22,7 +21,6 @@ var bannerRender = (function () {
         maxNum = bannerData.length;//->获取到数据后记录一下一共有多少张
     }
 
-    //->绑定数据
     function bindHTML() {
         var str = '',
             strFocus = '';
@@ -42,7 +40,6 @@ var bannerRender = (function () {
         focus.innerHTML = strFocus;
     }
 
-    //->延迟加载
     function lazyImg(curImg) {
         if (curImg.isLoad) return;
         var tempImg = new Image;
@@ -54,13 +51,6 @@ var bannerRender = (function () {
         curImg.isLoad = true;
     }
 
-    //->默认先展示第STEP对应的张
-    function show() {
-        var first = itemList[step];
-        utils.css(first, {zIndex: 1, opacity: 1});
-        lazyImg(imgList[step]);
-    }
-
     //-----------------------
 
     var step = 0,
@@ -68,7 +58,6 @@ var bannerRender = (function () {
         interval = 1000,
         autoTimer = null;
 
-    //->切换图片的基础方法:以后切换图片执行这个方法即可
     function change() {
         //->控制当前层级为一其余的为零
         for (var i = 0; i < itemList.length; i++) {
@@ -92,20 +81,27 @@ var bannerRender = (function () {
         lazyImg(imgList[step]);
 
         //->焦点对齐
-        for (i = 0; i < focusList.length; i++) {
-            item = focusList[i];
+        autoFocus();
+    }
+
+    function autoFocus() {
+        for (var i = 0; i < focusList.length; i++) {
+            var item = focusList[i];
             i === step ? utils.addClass(item, 'select') : utils.removeClass(item, 'select');
         }
     }
 
-    //->开启自动轮播
     function openAuto() {
         autoTimer = setInterval(function () {
             step++;
-            step >= maxNum ? step = 0 : null;
+            if (step >= maxNum) {
+                step = 0;
+            }
             change();
         }, interval);
     }
+
+    //---------------------------
 
     //->鼠标滑入滑出BANNER,控制自动轮播的暂停和开启,以及左右按钮的显示隐藏
     function mouseEvent() {
@@ -153,13 +149,15 @@ var bannerRender = (function () {
         init: function () {
             queryData();
             bindHTML();
-
-            //--------------------
-
             itemList = utils.children(imgBox, 'li');
             imgList = imgBox.getElementsByTagName('img');
             focusList = utils.children(focus, 'li');
-            window.onload = show;
+
+            window.onload = function () {
+                var first = itemList[step];
+                utils.css(first, {zIndex: 1, opacity: 1});
+                lazyImg(imgList[step]);
+            };
 
             //--------------------
 
