@@ -7,6 +7,11 @@ var bannerRender = (function () {
         itemList = null,
         focusList = null;
 
+    var step = 0,//->记录当前展示图片的索引(步长)
+        maxNum = 0,//->记录一共有多少张图片
+        interval = 3000,//->控制间隔多长时间切换到下一张(时间因子)
+        autoTimer = null;//->存储自动轮播定时器的返回值
+
     function queryData() {
         var xhr = new XMLHttpRequest;
         xhr.open('GET', 'json/banner.json', false);
@@ -30,7 +35,7 @@ var bannerRender = (function () {
             str += '</a>';
             str += '</li>';
 
-            var cName = i === step ? 'select' : '';
+            var cName = i === 0 ? 'select' : '';
             strFocus += '<li class="' + cName + '"></li>';
         }
 
@@ -49,26 +54,26 @@ var bannerRender = (function () {
         curImg.isLoad = true;
     }
 
-    //-----------------------
-
-    var step = 0,
-        maxNum = 0,
-        interval = 3000,
-        autoTimer = null;
-
+    //->change：切换到下一张图片
+    /*
+     * 让当前STEP对应的这张图片的LI(需要展示的这一张)zIndex=1，然后让其它图片的LI的zIndex=0
+     * 让当前需要展示这张图片的LI的透明度从0~1(300MS)，动画完成后让其它图片的LI的透明度为零
+     * 不要忘记加载真实的图片
+     */
     function change() {
-        //->控制当前层级为一其余的为零
+        //->控制zIndex
         for (var i = 0; i < itemList.length; i++) {
             var item = itemList[i];
             i === step ? utils.css(item, 'zIndex', 1) : utils.css(item, 'zIndex', 0);
         }
 
-        //->控制透明度:当前透明度为变为一,动画完成其余的透明度为零
+        //->控制透明度
         zhufengAnimate({
             curEle: itemList[step],
             target: {opacity: 1},
             duration: 500,
             callBack: function () {
+                //->让其它的LI透明度变为0
                 for (var i = 0; i < itemList.length; i++) {
                     i !== step ? utils.css(itemList[i], 'opacity', 0) : null;
                 }
@@ -82,6 +87,7 @@ var bannerRender = (function () {
         autoFocus();
     }
 
+    //->焦点对齐
     function autoFocus() {
         for (var i = 0; i < focusList.length; i++) {
             var item = focusList[i];
@@ -93,26 +99,30 @@ var bannerRender = (function () {
         init: function () {
             queryData();
             bindHTML();
+
             itemList = utils.children(imgBox, 'li');
             imgList = imgBox.getElementsByTagName('img');
             focusList = utils.children(focus, 'li');
 
             window.onload = function () {
-                var first = itemList[step];
-                utils.css(first, {zIndex: 1, opacity: 1});
-                lazyImg(imgList[step]);
+                var first = itemList[0];
+                utils.css(first, {
+                    zIndex: 1,
+                    opacity: 1
+                });
+                lazyImg(imgList[0]);
             };
 
-            //--------------------
-
+            //->自动轮播
             autoTimer = setInterval(function () {
                 step++;
                 if (step >= maxNum) {
-                    step = 0;
+                    step = 0;//->一共有四张(maxNum=4),如果当前step已经大于等于这个值了,后面没有第五张图片,我们此时让其切换到第一张即可
                 }
                 change();
             }, interval);
         }
     }
 })();
+
 bannerRender.init();

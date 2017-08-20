@@ -1,3 +1,8 @@
+//=>基于单例模式完成轮播图(BANNER RENDER就是我们的命名空间,轮播图中所有需要做的事情都要写在这个命名空间下)
+/*
+ * 每一个需要实现的功能,我们都封装为一个单独的方法
+ * 把那种需要在多个方法中都要使用的变量提取到外面来
+ */
 var bannerRender = (function () {
     var bannerData = null,
         banner = document.getElementById('banner'),
@@ -7,6 +12,7 @@ var bannerRender = (function () {
         itemList = null,
         focusList = null;
 
+    //->AJAX获取JSON数据
     function queryData() {
         var xhr = new XMLHttpRequest;
         xhr.open('GET', 'json/banner.json', false);
@@ -16,9 +22,9 @@ var bannerRender = (function () {
             }
         };
         xhr.send(null);
-        maxNum = bannerData.length;//->获取到数据后记录一下一共有多少张
     }
 
+    //->数据绑定(普通字符串拼接)
     function bindHTML() {
         var str = '',
             strFocus = '';
@@ -30,7 +36,7 @@ var bannerRender = (function () {
             str += '</a>';
             str += '</li>';
 
-            var cName = i === step ? 'select' : '';
+            var cName = i === 0 ? 'select' : '';
             strFocus += '<li class="' + cName + '"></li>';
         }
 
@@ -38,6 +44,7 @@ var bannerRender = (function () {
         focus.innerHTML = strFocus;
     }
 
+    //->图片延迟加载
     function lazyImg(curImg) {
         if (curImg.isLoad) return;
         var tempImg = new Image;
@@ -49,70 +56,30 @@ var bannerRender = (function () {
         curImg.isLoad = true;
     }
 
-    //-----------------------
-
-    var step = 0,
-        maxNum = 0,
-        interval = 3000,
-        autoTimer = null;
-
-    function change() {
-        //->控制当前层级为一其余的为零
-        for (var i = 0; i < itemList.length; i++) {
-            var item = itemList[i];
-            i === step ? utils.css(item, 'zIndex', 1) : utils.css(item, 'zIndex', 0);
-        }
-
-        //->控制透明度:当前透明度为变为一,动画完成其余的透明度为零
-        zhufengAnimate({
-            curEle: itemList[step],
-            target: {opacity: 1},
-            duration: 500,
-            callBack: function () {
-                for (var i = 0; i < itemList.length; i++) {
-                    i !== step ? utils.css(itemList[i], 'opacity', 0) : null;
-                }
-            }
-        });
-
-        //->加载真实的图片
-        lazyImg(imgList[step]);
-
-        //->焦点对齐
-        autoFocus();
-    }
-
-    function autoFocus() {
-        for (var i = 0; i < focusList.length; i++) {
-            var item = focusList[i];
-            i === step ? utils.addClass(item, 'select') : utils.removeClass(item, 'select');
-        }
-    }
-
     return {
+        //->整个单例模式的指挥官:在这里我们协调哪些方法先去执行,哪些事情现在做,哪些事情后续处理,以后想实现轮播图,直接调用INIT即可
         init: function () {
             queryData();
             bindHTML();
+
+            //->绑定完成数据后,我们获取需要的LI和IMG
             itemList = utils.children(imgBox, 'li');
             imgList = imgBox.getElementsByTagName('img');
             focusList = utils.children(focus, 'li');
 
+            //->当页面加载成功后
+            //1、让第一个LI显示(zIndex=1 opacity=1)
+            //2、给第一张图片做延迟加载(其它暂时不做)
             window.onload = function () {
-                var first = itemList[step];
-                utils.css(first, {zIndex: 1, opacity: 1});
-                lazyImg(imgList[step]);
+                var first = itemList[0];
+                utils.css(first, {
+                    zIndex: 1,
+                    opacity: 1
+                });
+                lazyImg(imgList[0]);
             };
-
-            //--------------------
-
-            autoTimer = setInterval(function () {
-                step++;
-                if (step >= maxNum) {
-                    step = 0;
-                }
-                change();
-            }, interval);
         }
     }
 })();
+
 bannerRender.init();
