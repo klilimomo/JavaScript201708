@@ -24,6 +24,7 @@
 ~function () {
     function tabPlugin(options) {
         options = options || {};
+        var preIndex = options.index || 0;
 
         //->THIS:当前要操作的那个容器[JQ对象](可能包含多个容器)
         //->如果传递的是多个容器,我们内置循环,一个个的处理即可
@@ -31,7 +32,6 @@
             //->THIS:当前循环的这一项 [JS对象]
             var $pageList = $(this).find('.page>*'),
                 $contentList = $(this).children('.content');
-            var preIndex = options.index || 0;
 
             //->让默认的选中
             $pageList.eq(preIndex).addClass('select').siblings().removeClass('select');
