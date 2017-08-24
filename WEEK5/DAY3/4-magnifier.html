@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训</title>
+    <link rel="stylesheet" href="css/reset.min.css">
+    <style>
+        /*
+         *  左侧的盒子和右侧的盒子是相同宽高
+         *  -> A = MARK/SMALL-BOX   MARK和左侧盒子的比较比例
+         *  -> B = SMALL-IMG/BIG-IMG 左侧小图和右侧大图的比例
+         *
+         *  => A===B 才能保证左侧MARK移动过程中能把右侧大图全部看见
+         */
+        .smallBox, .bigBox {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 210px;
+            height: 210px;
+            box-shadow: 3px 3px 10px 0 #555;
+        }
+
+        .smallBox img {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .smallBox .mark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 70px;
+            height: 70px;
+            background: #000;
+            opacity: 0.3;
+            filter: alpha(opacity=30);
+            cursor: move;
+        }
+
+        .bigBox {
+            left: 300px;
+            overflow: hidden;
+        }
+
+        .bigBox img {
+            display: block;
+            width: 300%;
+            height: 300%;
+        }
+    </style>
+</head>
+<body>
+<div class="smallBox">
+    <img src="img/1.jpg" alt="">
+    <div class="mark"></div>
+</div>
+<div class="bigBox">
+    <img src="img/2.jpg" alt="">
+</div>
+</body>
+</html>
