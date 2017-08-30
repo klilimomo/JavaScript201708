@@ -9,9 +9,9 @@ function sum(num1, num2) {
 // sum(10, 20);//->this:window  =>window.total=30
 // obj.sum(10, 20);//->Uncaught TypeError: obj.sum is not a function =>OBJ不具备SUM这个属性,所有不可以通过这种方式把方法中的THIS修改为OBJ
 
-//=> sum.call：sum这个实例通过原型链的查找机制,找到Function.prototype的call方法
-//=> sum.call()：把找到的方法执行(执行的是的CALL这个方法)
 /*
+ //=> sum.call：sum这个实例通过原型链的查找机制,找到Function.prototype的call方法
+ //=> sum.call()：把找到的方法执行(执行的是的CALL这个方法)
  * call的作用:
  *  ->把需要操作函数中的this变为第一个实参的值
  *   [非严格模式下]

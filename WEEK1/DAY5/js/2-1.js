@@ -21,4 +21,4 @@ var p1 = new Person();//->构造函数执行:此时的PERSON不是一个普普�
  *   3、P1就是当前类的实例：实例都是对象数据类型的
  */
 // console.log(typeof p1);//->'object'
-// console.log(typeof Person);//->'function'
+// console.log(typeof 'function'Person);//->
