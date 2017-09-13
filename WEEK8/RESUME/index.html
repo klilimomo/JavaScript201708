@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>珠峰培训-H5场景创意简历</title>
+    <!--IMPORT CSS-->
+    <link rel="stylesheet/less" href="css/index.less">
+    <script src="js/less-2.5.3.min.js"></script>
+
+    <!--REM-->
+    <script>
+        ~function () {
+            window.addEventListener('resize', computed, false);
+            computed();
+            function computed() {
+                var deviceW = document.documentElement.clientWidth;
+                if (deviceW > 640) return;
+                document.documentElement.style.fontSize = deviceW / 640 * 100 + 'px';
+            }
+        }();
+    </script>
+</head>
+<body>
+<main class="container">
+    <!--LOADING-->
+    <section class="loading">
+        <div class="title">
+            <h2>珠峰培训</h2>
+            <h3>H5场景创意交互型简历</h3>
+        </div>
+        <div class="progress">
+            <div class="already"></div>
+        </div>
+    </section>
+
+
+</main>
+</body>
+</html>
