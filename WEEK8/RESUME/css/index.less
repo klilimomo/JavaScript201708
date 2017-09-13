@@ -7,10 +7,14 @@ html {
 
 html, body {
   .full-page;
+  position: relative;
+  z-index: -4;
 }
 
 .container {
   .full-page;
+  position: relative;
+  z-index: -3;
   margin: 0 auto;
   max-width: 640px;
 }
@@ -92,3 +96,129 @@ html, body {
     background-position: 0 0;
   }
 }
+
+/*--PHONE--*/
+.phone {
+  .full-page;
+  display: none;
+  position: relative;
+  z-index: -2;
+  background: url("../img/zf_phoneBg.jpg") no-repeat;
+  background-size: cover;
+
+  .title {
+    margin-top: .5rem;
+
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 2.62rem;
+      height: 1.25rem;
+    }
+
+    span {
+      display: none;
+      margin-top: .1rem;
+      line-height: .3rem;
+      text-align: center;
+      color: #FFF;
+      font-size: .3rem;
+      letter-spacing: .05rem;
+    }
+  }
+
+  .listen {
+    position: absolute;
+    left: 50%;
+    margin-left: -2.6rem;
+    bottom: .3rem;
+    width: 5.2rem;
+    height: 3.6rem;
+    background: url("../img/zf_phoneListen.png") no-repeat;
+    background-size: 100% 100%;
+
+    .touch {
+      box-sizing: border-box;
+      position: absolute;
+      right: -.06rem;
+      bottom: .48rem;
+      z-index: 999;
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+
+    .move {
+      .touch;
+      border: .03rem solid #0F0;
+      border-radius: 50%;
+      z-index: -1;
+
+      .animation(@name: phoneMove,@timing-function: linear,@count: infinite);
+    }
+  }
+
+  .detail {
+    position: absolute;
+    bottom: .3rem;
+    left: 50%;
+    margin-left: -2.6rem;
+    width: 5.2rem;
+    height: 6.59rem;
+    background: url("../img/zf_phoneDetail.png") no-repeat;
+    background-size: 100% 100%;
+
+    -webkit-transform: translateY(6.89rem);
+    transform: translateY(6.89rem);
+    .transition(@duration: .3s);
+
+    .touch {
+      position: absolute;
+      bottom: .28rem;
+      left: 50%;
+      margin-left: -.8rem;
+      z-index: 999;
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+  }
+}
+
+@-webkit-keyframes phoneMove {
+  0% {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+
+@keyframes phoneMove {
+  0% {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

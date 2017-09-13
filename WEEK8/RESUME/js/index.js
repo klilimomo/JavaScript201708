@@ -97,6 +97,77 @@ let loadingRender = (function () {
 
 /*--PHONE--*/
 let phoneRender = (function () {
+    let $phone = $('.phone'),
+        $listen = $phone.find('.listen'),
+        $listenTouch = $listen.find('.touch'),
+        $detail = $phone.find('.detail'),
+        $detailTouch = $detail.find('.touch'),
+        $time = $phone.find('span');
+
+    let bellAudio = $('#bellAudio')[0],
+        sayAudio = $('#sayAudio')[0];
+
+    function listenTouch() {
+        $listenTouch.singleTap(function () {
+            bellAudio.pause();
+            $(bellAudio).remove();
+
+            $listen.remove();
+            $detail.css('transform', 'translateY(0)')
+                .on('webkitTransitionEnd', function () {
+                    //->TRANSITION动画结束
+                    //JS中控制CSS3属性,只写一套加前缀的即可
+                    $time.css('display', 'block');
+                    sayAudio.play();
+                    watchTime();
+                });
+        });
+    }
+
+    let watchTimer = null;
+
+    function watchTime() {
+        watchTimer = setInterval(()=> {
+            var curTime = sayAudio.currentTime,
+                durTime = sayAudio.duration;
+            if (curTime >= durTime) {
+                message();
+                return;
+            }
+            var minute = Math.floor(curTime / 60),
+                second = Math.ceil(curTime - minute * 60);
+            minute < 10 ? minute = '0' + minute : null;
+            second < 10 ? second = '0' + second : null;
+            $time.html(minute + ':' + second);
+        }, 1000);
+    }
+
+    function message() {
+        clearInterval(watchTimer);
+        sayAudio.pause();
+        $(sayAudio).remove();
+        $phone.remove();
+        messageRender.init();
+    }
+
+    return {
+        init: function () {
+            $phone.css('display', 'block');
+
+            //->PLAY BELL
+            bellAudio.play();
+
+            //->LISTEN TOUCH
+            listenTouch();
+
+            //->DETAIL TOUCH
+            $detailTouch.singleTap(message);
+        }
+    }
+})();
+
+/*--MESSAGE--*/
+let messageRender = (function () {
     return {
         init: function () {
 
@@ -104,5 +175,4 @@ let phoneRender = (function () {
     }
 })();
 
-
-loadingRender.init();
+messageRender.init();
