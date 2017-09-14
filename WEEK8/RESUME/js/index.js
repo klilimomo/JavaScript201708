@@ -168,6 +168,101 @@ let phoneRender = (function () {
 
 /*--MESSAGE--*/
 let messageRender = (function () {
+    let $message = $('.message'),
+        musicAudio = $('#musicAudio')[0],
+        $wrapper = $message.find('.wrapper'),
+        $messageList = $wrapper.find('li'),
+        $keyboard = $message.find('.keyboard'),
+        $text = $keyboard.find('.text'),
+        $submit = $keyboard.find('.submit');
+
+    let autoTimer = null,
+        step = -1,
+        initTranslateY = 0;
+
+    function messageMove() {
+        let $cur = $messageList.eq(++step);
+        //->显示每一条消息
+        $cur.css({
+            transform: 'translateY(0)',
+            opacity: 1
+        });
+
+        //->当第三条消息完成后(TRANSITION动画完成了),展示键盘(此时停止自动出消息)
+        if (step === 2) {
+            clearInterval(autoTimer);
+            //->我们需要操作两个样式执行过渡动画,事件被执行两次(webkitTransitionEnd:有几个样式需要执行过渡动画,事件就会被触发执行几次)
+            let fn = function () {
+                $cur.off('webkitTransitionEnd', fn);
+                keyboard();
+            };
+            $cur.on('webkitTransitionEnd', fn);
+        }
+
+        //->从第五条展示开始,消息列表要整体上移了(当前这条消息高度的基础上+10是上移的距离)
+        if (step >= 4) {
+            initTranslateY -= $cur[0].offsetHeight + 10;
+            $wrapper.css('transform', 'translateY(' + initTranslateY + 'px)');
+        }
+
+        //->结束:结束音频,干掉当前页,进入下一个页面
+        if (step >= $messageList.length - 1) {
+            clearInterval(autoTimer);
+            musicAudio.pause();
+            $(musicAudio).remove();
+            setTimeout(()=> {
+                $message.remove();
+                cubeRender.init();
+            }, 2000);
+        }
+    }
+
+    function keyboard() {
+        //->让键盘显示
+        $keyboard.css('transform', 'translateY(0)');
+
+        //->显示文字：文字打印机
+        //JQ中的ONE也是绑定事件,只不过只绑定一次而已,触发一次后自动把绑定的方法移除
+        $keyboard.one('webkitTransitionEnd', ()=> {
+            let str = '都学了啊，可我还是找不到好工作！',
+                textTimer = null,
+                n = -1;
+            textTimer = setInterval(()=> {
+                if (n >= str.length - 1) {
+                    clearInterval(textTimer);
+                    //->显示提交按钮
+                    $submit.css('display', 'block');
+                    return;
+                }
+                let textVal = $text.html();
+                textVal += str[++n];
+                $text.html(textVal);
+            }, 100);
+        });
+    }
+
+    function submitEvent() {
+        $submit.singleTap(function () {
+            $text.html('');
+            $keyboard.css('transform', 'translateY(3.7rem)');
+
+            messageMove();
+            autoTimer = setInterval(messageMove, 1500);
+        });
+    }
+
+    return {
+        init: function () {
+            $message.css('display', 'block');
+            musicAudio.play();
+            autoTimer = setInterval(messageMove, 1500);
+            submitEvent();
+        }
+    }
+})();
+
+/*--CUBE--*/
+let cubeRender = (function () {
     return {
         init: function () {
 
