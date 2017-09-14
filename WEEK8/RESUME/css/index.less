@@ -314,6 +314,97 @@ html, body {
   }
 }
 
+/*--CUBE--*/
+.cube {
+  .full-page;
+  display: none;
+  background: url("../img/zf_cubeBg.jpg") no-repeat;
+  background-size: cover;
+
+  .tip {
+    position: absolute;
+    bottom: .5rem;
+    left: 50%;
+    margin-left: -1.97rem;
+    width: 3.94rem;
+    height: .44rem;
+  }
+
+  ul {
+    .middle(5.1, 5.1);
+    width: 5.1rem;
+    height: 5.1rem;
+
+    li {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  /*
+   * CSS3的3D变形
+   * 1、给当前需要3D变形(UL)元素所在的舞台(CUBE)设置视距(perspective:1000~2000)：虚拟出人眼距离舞台的距离(不设置,会出现一叶障目)
+   *
+   * 2、给当前需要3D变形的元素的变形效果设置为3D变形：transform-style: preserve-3d;
+   *
+   * 3、想变成啥就变成啥(在我们当前案例中,我们需要把六个页面拼接成一个魔方)
+   */
+  perspective: 2000px;
+
+  ul {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+
+    /*设置初始的旋转角度：让开始的时候就可以看出魔方的效果*/
+    -webkit-transform: scale(0.6) rotateX(-30deg) rotateY(45deg);
+    transform: scale(0.6) rotateX(-30deg) rotateY(45deg);
+
+    .transition(@duration: .3s);
+
+    li {
+      &:nth-child(1) {
+        -webkit-transform: translateZ(2.55rem);
+        transform: translateZ(2.55rem);
+      }
+
+      &:nth-child(2) {
+        -webkit-transform: translateZ(-2.55rem) rotateY(180deg);
+        transform: translateZ(-2.55rem) rotateY(180deg);
+      }
+
+      &:nth-child(3) {
+        -webkit-transform: translateX(2.55rem) rotateY(90deg);
+        transform: translateX(2.55rem) rotateY(90deg);
+      }
+
+      &:nth-child(4) {
+        -webkit-transform: translateX(-2.55rem) rotateY(-90deg);
+        transform: translateX(-2.55rem) rotateY(-90deg);
+      }
+
+      &:nth-child(5) {
+        -webkit-transform: translateY(-2.55rem) rotateX(90deg);
+        transform: translateY(-2.55rem) rotateX(90deg);
+      }
+
+      &:nth-child(6) {
+        -webkit-transform: translateY(2.55rem) rotateX(-90deg);
+        transform: translateY(2.55rem) rotateX(-90deg);
+      }
+    }
+  }
+}
+
+
 
 
 

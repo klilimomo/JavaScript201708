@@ -1,3 +1,4 @@
+/*--LOADING--*/
 let loadingRender = (function () {
     //->需要预先加载的所有图片
     let imgList = ['img/icon.png',
@@ -263,11 +264,12 @@ let messageRender = (function () {
 
 /*--CUBE--*/
 let cubeRender = (function () {
+    let $cube = $('.cube');
     return {
         init: function () {
-
+            $cube.css('display', 'block');
         }
     }
 })();
 
-messageRender.init();
+cubeRender.init();
