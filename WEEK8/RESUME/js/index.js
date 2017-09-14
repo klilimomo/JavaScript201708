@@ -1,3 +1,9 @@
+//->如果一个页面中需要滑动处理,我们需要阻止页面默认滑动的行为
+//例如：微信中的上下滑动会出现一个把整个页面下拉出现微信背景的效果，浏览器的滑动有可能是页卡的切换...
+$(document).on('touchstart touchmove touchend', function (ev) {
+    ev.preventDefault();
+}, false);
+
 /*--LOADING--*/
 let loadingRender = (function () {
     //->需要预先加载的所有图片
@@ -264,10 +270,66 @@ let messageRender = (function () {
 
 /*--CUBE--*/
 let cubeRender = (function () {
-    let $cube = $('.cube');
+    let $cube = $('.cube'),
+        $box = $cube.children('ul');
+
+    //->起始X轴或者Y轴的旋转角度,手指松开的时候,是基于这个角度继续旋转的
+    $box.attr({
+        rotateX: -30,
+        rotateY: 45
+    });
+
+    function start(ev) {
+        let point = ev.changedTouches[0];
+        $box.attr({//->ATTR设置的自定属性值都是字符串
+            strX: point.pageX,
+            strY: point.pageY,
+            isMove: false,
+            changeX: 0,
+            changeY: 0
+        });
+    }
+
+    function move(ev) {
+        let point = ev.changedTouches[0];
+        let changeX = point.pageX - $box.attr('strX'),
+            changeY = point.pageY - $box.attr('strY');
+        if (Math.abs(changeX) > 10 || Math.abs(changeY) > 10) {
+            $box.attr({
+                isMove: true,
+                changeX: changeX,
+                changeY: changeY
+            });
+        }
+    }
+
+    function end() {
+        let isMove = $box.attr('isMove');
+        if (isMove !== 'true') return;
+        let rotateX = parseFloat($box.attr('rotateX')),
+            rotateY = parseFloat($box.attr('rotateY')),
+            changeY = parseFloat($box.attr('changeY')),
+            changeX = parseFloat($box.attr('changeX'));
+        rotateX = rotateX - changeY / 3;
+        rotateY = rotateY + changeX / 3;
+        $box.css(`transform`, `scale(0.6) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
+        $box.attr({
+            rotateX: rotateX,
+            rotateY: rotateY
+        });
+    }
+
     return {
         init: function () {
-            $cube.css('display', 'block');
+            $cube.css('display', 'block')
+                .on('touchstart', start)
+                .on('touchmove', move)
+                .on('touchend', end);
+
+            $box.find('li').tap(function () {
+                let index = $(this).index();
+                
+            });
         }
     }
 })();
