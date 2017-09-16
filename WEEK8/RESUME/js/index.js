@@ -328,7 +328,7 @@ let cubeRender = (function () {
                 .find('li').tap(function () {
                 //->ZP中提供了一些快捷的移动操作方法:tap、singleTap、doubleTap、longTap、swipe、swipeLeft...
                 let index = $(this).index();
-
+                
             });
         }
     }
