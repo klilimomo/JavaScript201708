@@ -340,7 +340,7 @@ let swiperRender = (function () {
         example = null;
 
     function change(ex) {
-        
+
     }
 
     return {
