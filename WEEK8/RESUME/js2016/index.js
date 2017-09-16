@@ -298,7 +298,6 @@ var swiperRender = function () {
     function change(ex) {
         var index = ex.activeIndex,
             slideAry = ex.slides;
-
         if (index === 0) {
             $makisu.makisu({
                 selector: 'dd',
@@ -337,4 +336,4 @@ var swiperRender = function () {
     };
 }();
 
-loadingRender.init(1);
+cubeRender.init(1);
