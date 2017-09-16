@@ -361,7 +361,10 @@ let swiperRender = (function () {
             $makisu.makisu('close');
         }
 
-        
+        //->给当前页设置ID,其余页面移除ID
+        $.each(slideAry, (n, item)=> {
+            item.id = n === index ? `page${index + 1}` : ``;
+        });
     }
 
     return {
@@ -381,6 +384,6 @@ let swiperRender = (function () {
 })();
 
 
-swiperRender.init();
+swiperRender.init(1);
 
 
