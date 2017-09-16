@@ -328,9 +328,36 @@ let cubeRender = (function () {
                 .find('li').tap(function () {
                 //->ZP中提供了一些快捷的移动操作方法:tap、singleTap、doubleTap、longTap、swipe、swipeLeft...
                 let index = $(this).index();
-                
+                swiperRender.init(index);
             });
         }
     }
 })();
-cubeRender.init();
+
+/*--SWIPER--*/
+let swiperRender = (function () {
+    let $swiperContainer = $('.swiper-container'),
+        example = null;
+
+    function change(ex) {
+        
+    }
+
+    return {
+        init: function (index) {
+            index = index || 0;
+            $swiperContainer.css('display', 'block');
+            example = new Swiper('.swiper-container', {
+                effect: 'coverflow',
+                onInit: change,
+                onTransitionEnd: change
+            });
+            example.slideTo(index, 0);
+        }
+    }
+})();
+
+
+swiperRender.init(2);
+
+
