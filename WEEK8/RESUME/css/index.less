@@ -414,5 +414,64 @@ html, body {
   .swiper-slide {
     .full-page;
   }
+}
 
+.page1 {
+  perspective: 2000px;
+
+  dl {
+    .middle(5.4, 7.2);
+    width: 5.4rem;
+    height: 7.2rem;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+
+    @bg: #8FBB4C;
+    dt {
+      height: .6rem;
+      line-height: .6rem;
+      text-align: center;
+      font-size: .4rem;
+      color: yellow;
+      background: @bg;
+    }
+
+    dd {
+      position: relative;
+      box-sizing: border-box;
+      height: .6rem;
+      line-height: .6rem;
+      border-top: .02rem dashed rgba(255, 255, 255, .3);
+      background: @bg;
+
+      em {
+        position: absolute;
+        left: .15rem;
+        top: 50%;
+        z-index: 100;
+        margin-top: -.21rem;
+        width: .36rem;
+        height: .42rem;
+        line-height: .42rem;
+        text-align: center;
+        font-style: normal;
+        color: #FFF;
+        font-size: .2rem;
+        background: url("../img/zf_outline.png") no-repeat;
+        background-size: 100% 100%;
+      }
+
+      a {
+        position: relative;
+        z-index: 100; /*防止折叠过程中把文字覆盖掉*/
+        display: block;
+        margin-left: .66rem;
+        font-size: .28rem;
+        color: #000;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+  }
 }
