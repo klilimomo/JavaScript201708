@@ -52,3 +52,62 @@ html, body {
     background-size: 100%;
   }
 }
+
+/*--NAV--*/
+/*.navBox {
+  box-sizing: border-box;
+  padding: .16rem 0;
+  height: 1.6rem;
+  background: #FFF;
+  overflow: hidden;
+
+  li {
+    float: left;
+    width: 16%;
+    height: .64rem;
+    line-height: .64rem;
+    text-align: center;
+    font-size: .32rem;
+
+    a {
+      display: block;
+      height: 100%;
+      color: #555;
+    }
+
+    &:nth-of-type(6n+1) {
+      margin-left: 2%;
+    }
+  }
+}*/
+
+.navBox {
+  box-sizing: border-box;
+  padding: .16rem 0;
+  height: 1.6rem;
+  background: #FFF;
+  overflow: hidden;
+
+  ul {
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+  }
+
+  li {
+    width: 16%;
+    height: .64rem;
+    line-height: .64rem;
+    text-align: center;
+    font-size: .32rem;
+
+    a {
+      display: block;
+      height: 100%;
+      color: #555;
+    }
+  }
+}
