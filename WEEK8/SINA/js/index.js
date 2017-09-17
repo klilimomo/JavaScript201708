@@ -137,6 +137,81 @@ let asideRender = (()=> {
 })();
 asideRender.init();
 
+/*--NEWS--*/
+let newsRender = (()=> {
+    let $news = $('.news'),
+        $plan = $.Callbacks();
+
+    let fn = (result)=> {
+        let newsList = result['newsList'],
+            imgList = result['imgList'];
+        let str = ``;
+        str += `<ul class="item">`;
+        $.each(newsList, function () {
+            str += `<li><a href="${this.link}">
+                <img src="${this.img}" alt="">
+                <div>
+                    <p>${this.title}</p>
+                    <span>
+                        ${this.count}
+                        <i class="icon-comment"></i>
+                    </span>
+                </div>
+            </a></li>`;
+        });
+        str += `</ul>`;
+
+        str += `<div class="image">`;
+        str += `<a href="${imgList.link}">`;
+        str += `<p>${imgList.title}</p>`;
+        str += `<div class="clearfix">`;
+        $.each(imgList.img, function () {
+            str += `<img src="${this}" alt="">`;
+        });
+        str += `</div>`;
+        str += `<span>
+                    ${imgList.count}
+                    <i class="icon-comment"></i>
+                </span>`;
+        str += `</a>`;
+        str += `</div>`;
+        $news.append(str);
+
+        $(window).on('scroll', loadMore);
+    };
+
+    let loadMore = ()=> {
+        let clientH = document.documentElement.clientHeight,
+            scrollT = document.documentElement.scrollTop || document.body.scrollTop,
+            winH = document.documentElement.scrollHeight || document.body.scrollHeight;
+        if (clientH + scrollT + 10 > winH) {
+            //->加载更多数据
+            $(window).off('scroll', loadMore);
+            $.ajax({
+                url: 'news.json',
+                method: 'get',
+                dataType: 'json',
+                cache: false,
+                success: fn
+            });
+        }
+    };
+
+    $plan.add(fn);
+
+    return {
+        init(){
+            $.ajax({
+                url: 'news.json',
+                method: 'get',
+                dataType: 'json',
+                cache: false,
+                success: $plan.fire
+            });
+        }
+    }
+})();
+newsRender.init();
 
 
 
