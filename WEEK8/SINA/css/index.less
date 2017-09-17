@@ -1,0 +1,54 @@
+@import "reset";
+@import "swiper";
+@import "font";
+
+html {
+  font-size: 100px;
+}
+
+html, body {
+  background: #E1E1E1;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 640px;
+}
+
+/*--HEADER--*/
+.headerBox {
+  @text: #FFF;
+
+  padding: 0 .2rem;
+  background: #129BF0;
+
+  h1 {
+    float: left;
+    width: .8rem;
+    height: 1rem;
+    font-size: 0;
+
+    a {
+      display: block;
+      height: 100%;
+      line-height: 1rem;
+      font-size: .8rem;
+      color: @text;
+    }
+  }
+
+  .menu, .user, .weather {
+    float: right;
+    margin-left: .32rem;
+    width: .44rem;
+    height: 1rem;
+    line-height: 1rem;
+    font-size: .44rem;
+    color: @text;
+  }
+
+  .weather {
+    background: url("../images/cloud.gif") no-repeat center center;
+    background-size: 100%;
+  }
+}
