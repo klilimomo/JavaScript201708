@@ -1,1 +1,3 @@
-let a = 12;
+document.getElementById('box').onclick = function () {
+    this.style.background = 'green';
+};
